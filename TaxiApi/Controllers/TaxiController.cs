@@ -61,5 +61,26 @@ namespace TaxiApi.Controllers
             return Created($"/api/taxi/{car.Id}", null);
         }
 
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCar([FromRoute] int id)
+        {
+            var car = _dbContext
+                .Cars
+                .FirstOrDefault(c => c.Id == id);
+
+            if (car is null)
+            {
+                return BadRequest("Car not found");
+            }
+
+            _dbContext
+                .Cars
+                .Remove(car);
+            _dbContext.SaveChanges();
+
+            return Ok($"Deleted car {id}");
+
+        }
+
     }
 }
