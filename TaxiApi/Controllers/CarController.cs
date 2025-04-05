@@ -66,7 +66,24 @@ namespace TaxiApi.Controllers
             return Ok($"Deleted car {id}");
         }
 
-       
+        [HttpPut("{id}")]
+        public ActionResult UpdateCar([FromBody] EditCarDto dto, [FromRoute]int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                BadRequest(ModelState);
+            }
+
+            var car = _carService.Edit(dto, id);
+
+            if (!car)
+            {
+                return NotFound();
+            }
+
+            return Ok($"Car {id} is updated");
+
+        }
 
     }
 }

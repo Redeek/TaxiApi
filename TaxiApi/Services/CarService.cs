@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Runtime.InteropServices.JavaScript;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TaxiApi.Entities;
 using TaxiApi.Models;
@@ -11,6 +12,8 @@ namespace TaxiApi.Services
         IEnumerable<CarDto> GetAll();
         int Create(CreateCarDto dto);
         bool Delete(int id);
+
+        bool Edit(EditCarDto dto, int id);
     }
 
     public class CarService : ICarService
@@ -79,6 +82,26 @@ namespace TaxiApi.Services
             _dbContext
                 .Cars
                 .Remove(car);
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool Edit(EditCarDto dto, int id)
+        {
+            var editCar = _dbContext
+                .Cars
+                .FirstOrDefault(c => c.Id == id);
+
+            if (editCar is null)
+            {
+                return false;
+            }
+
+            editCar.Name = dto.Name;
+            editCar.Plate = dto.Plate;
+            editCar.Category = dto.Category;
+
             _dbContext.SaveChanges();
 
             return true;
