@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using TaxiApi.Entities;
+using TaxiApi.Services;
 
 namespace TaxiApi
 {
@@ -15,6 +16,7 @@ namespace TaxiApi
             builder.Services.AddDbContext<TaxiDbContext>();
             builder.Services.AddScoped<TaxiSeeder>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddScoped<ICarService, CarService>();
 
             var app = builder.Build();
 
