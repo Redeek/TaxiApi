@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TaxiApi.Entities;
+using TaxiApi.Exceptions;
 using TaxiApi.Models;
 
 namespace TaxiApi.Services
@@ -11,9 +12,9 @@ namespace TaxiApi.Services
         CarDto GetById(int id);
         IEnumerable<CarDto> GetAll();
         int Create(CreateCarDto dto);
-        bool Delete(int id);
+        void Delete(int id);
 
-        bool Edit(EditCarDto dto, int id);
+        void Edit(EditCarDto dto, int id);
     }
 
     public class CarService : ICarService
@@ -38,9 +39,7 @@ namespace TaxiApi.Services
                 .FirstOrDefault(c => c.Id == id);
 
             if (car is null)
-            {
-                return null;
-            }
+                throw new NotFoundException("Car not found");
 
             var result = _mapper.Map<CarDto>(car);
 
@@ -70,7 +69,7 @@ namespace TaxiApi.Services
             return car.Id;
         }
 
-        public bool Delete(int id)
+        public void Delete(int id)
         {
             _logger.LogError($"Car with id: {id} DELETE action invoke");
             var car = _dbContext
@@ -78,28 +77,23 @@ namespace TaxiApi.Services
                 .FirstOrDefault(c => c.Id == id);
 
             if (car is null)
-            {
-                return false;
-            }
+                throw new NotFoundException("Car not found");
 
             _dbContext
                 .Cars
                 .Remove(car);
             _dbContext.SaveChanges();
 
-            return true;
         }
 
-        public bool Edit(EditCarDto dto, int id)
+        public void Edit(EditCarDto dto, int id)
         {
             var editCar = _dbContext
                 .Cars
                 .FirstOrDefault(c => c.Id == id);
 
             if (editCar is null)
-            {
-                return false;
-            }
+                throw new NotFoundException("Car not found");
 
             editCar.Name = dto.Name;
             editCar.Plate = dto.Plate;
@@ -107,7 +101,7 @@ namespace TaxiApi.Services
 
             _dbContext.SaveChanges();
 
-            return true;
+            
         }
     }
 }

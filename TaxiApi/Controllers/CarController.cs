@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using TaxiApi.Entities;
 using TaxiApi.Models;
 using TaxiApi.Services;
@@ -8,6 +9,7 @@ using TaxiApi.Services;
 namespace TaxiApi.Controllers
 {
     [Route("api/car")]
+    [ApiController]
     public class CarController : ControllerBase
     {
         private readonly ICarService _carService;
@@ -31,21 +33,12 @@ namespace TaxiApi.Controllers
 
             var car = _carService.GetById(id);
 
-            if (car is null)
-            {
-                NotFound();
-            }
-
             return Ok(car);
         }
 
         [HttpPost]
         public ActionResult CreateCar([FromBody] CreateCarDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var car = _carService.Create(dto);
 
@@ -56,30 +49,17 @@ namespace TaxiApi.Controllers
         public ActionResult DeleteCar([FromRoute] int id)
         {
 
-            var car = _carService.Delete(id);
+            _carService.Delete(id);
 
-            if (car is false)
-            {
-                return NotFound("Car not found");
-            }
-
-            return Ok($"Deleted car {id}");
+            return NoContent();
         }
 
         [HttpPut("{id}")]
         public ActionResult UpdateCar([FromBody] EditCarDto dto, [FromRoute]int id)
         {
-            if (!ModelState.IsValid)
-            {
-                BadRequest(ModelState);
-            }
+          
+            _carService.Edit(dto, id);
 
-            var car = _carService.Edit(dto, id);
-
-            if (!car)
-            {
-                return NotFound();
-            }
 
             return Ok($"Car {id} is updated");
 
