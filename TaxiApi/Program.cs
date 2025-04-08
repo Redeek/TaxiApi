@@ -21,6 +21,7 @@ namespace TaxiApi
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<ErrorHandlingMiddleware>();
             builder.Host.UseNLog();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
@@ -32,6 +33,12 @@ namespace TaxiApi
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("swagger/v1/swagger.json", "Taxi API"); 
+            });
 
             app.UseAuthorization();
 

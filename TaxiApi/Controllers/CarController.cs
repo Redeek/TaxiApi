@@ -19,7 +19,7 @@ namespace TaxiApi.Controllers
             this._carService = _carService;
         }
 
-
+        [HttpGet]
         public ActionResult<IEnumerable<CarDto>> GetAll()
         {
             var carsDtos = _carService.GetAll();
