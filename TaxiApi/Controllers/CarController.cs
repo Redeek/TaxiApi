@@ -49,7 +49,7 @@ namespace TaxiApi.Controllers
 
             var car = _carService.Create(dto);
 
-            return Created($"/api/taxi/{car}", null);
+            return Created($"/api/car/{car}", null);
         }
 
         [HttpDelete("{id}")]

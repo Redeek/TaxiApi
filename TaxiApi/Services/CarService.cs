@@ -20,11 +20,13 @@ namespace TaxiApi.Services
     {
         private readonly TaxiDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly ILogger<CarService> _logger;
 
-        public CarService(TaxiDbContext dbContext, IMapper mapper)
+        public CarService(TaxiDbContext dbContext, IMapper mapper, ILogger<CarService> logger)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -70,6 +72,7 @@ namespace TaxiApi.Services
 
         public bool Delete(int id)
         {
+            _logger.LogError($"Car with id: {id} DELETE action invoke");
             var car = _dbContext
                 .Cars
                 .FirstOrDefault(c => c.Id == id);
