@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using NLog.Web;
 using TaxiApi.Entities;
 using TaxiApi.Exceptions;
+using TaxiApi.Middleware;
 using TaxiApi.Services;
 
 namespace TaxiApi
@@ -20,6 +21,7 @@ namespace TaxiApi
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<ErrorHandlingMiddleware>();
+            builder.Services.AddScoped<RequestTimeMiddleware>();
             builder.Host.UseNLog();
             builder.Services.AddSwaggerGen();
 
@@ -31,6 +33,7 @@ namespace TaxiApi
             seeder.Seed();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<RequestTimeMiddleware>();
 
             app.UseHttpsRedirection();
 
