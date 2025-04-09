@@ -11,6 +11,7 @@ namespace TaxiApi.Services
         int CreateDriverForCar(int carId, CreateDriverDto dto);
         IEnumerable<DriverDto> GetAllDriversByCarId(int carId);
         DriverDto GetDriverById(int driverId);
+        void DeleteDriver(int driverId);
     }
 
     public class DriverService : IDriverService
@@ -70,6 +71,20 @@ namespace TaxiApi.Services
             var result = _mapper.Map<DriverDto>(driver);
 
             return result;
+        }
+
+        public void DeleteDriver(int driverId)
+        {
+            var driver = _context
+                .Drivers
+                .FirstOrDefault(d => d.Id == driverId);
+
+            if (driver is null)
+                throw new NotFoundException("Driver not Found");
+
+            _context.Drivers.Remove(driver);
+            _context.SaveChanges();
+
         }
 
     }

@@ -39,6 +39,14 @@ namespace TaxiApi.Controllers
 
             return Ok(driver);
         }
+
+        [HttpDelete("{driverId}")]
+        public ActionResult<DriverDto> DeleteDriver([FromRoute] int driverId)
+        {
+            _driverService.DeleteDriver(driverId);
+
+            return NoContent();
+        }
              
     }
 }
