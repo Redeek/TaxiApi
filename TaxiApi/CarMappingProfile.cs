@@ -14,6 +14,8 @@ namespace TaxiApi
             CreateMap<Driver, DriverDto>();
 
             CreateMap<CreateCarDto, Car>();
+
+            CreateMap<CreateDriverDto, Driver>();
         }
     }
 }

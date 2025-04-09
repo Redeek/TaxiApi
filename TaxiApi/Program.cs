@@ -20,6 +20,7 @@ namespace TaxiApi
             builder.Services.AddScoped<TaxiSeeder>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddScoped<ICarService, CarService>();
+            builder.Services.AddScoped<IDriverService, DriverService>();
             builder.Services.AddScoped<ErrorHandlingMiddleware>();
             builder.Services.AddScoped<RequestTimeMiddleware>();
             builder.Host.UseNLog();
