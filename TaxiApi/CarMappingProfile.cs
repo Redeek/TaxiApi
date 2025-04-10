@@ -8,8 +8,7 @@ namespace TaxiApi
     {
         public CarMappingProfile()
         {
-            CreateMap<Car, CarDto>()
-                .ForMember(m => m.Drivers, c => c.MapFrom(s => s.Drivers));
+            CreateMap<Car, CarDto>();
 
             CreateMap<Driver, DriverDto>();
 

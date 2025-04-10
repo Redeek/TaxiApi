@@ -1,4 +1,7 @@
 ﻿using System.Diagnostics.Contracts;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using TaxiApi.Entities;
 
 namespace TaxiApi.Entities
 {
@@ -17,4 +20,6 @@ namespace TaxiApi.Entities
         public int RoleId { get; set; }
         public virtual Role Role { get; set; }
     }
+
+
 }

@@ -16,15 +16,15 @@ namespace TaxiApi.Controllers
             _driverService = driverService;
         }
 
-        [HttpPost("/car/{carId}")]
+        [HttpPost("car/{carId}")]
         public ActionResult CreateDriver([FromRoute] int carId, [FromBody]CreateDriverDto dto)
         {
             var newDriver = _driverService.CreateDriverForCar(carId, dto);
 
-            return Created($"api/car/{carId}/driver/{newDriver}", null);
+            return Created($"api/driver/{newDriver}/car/{carId}", null);
         }
 
-        [HttpGet("/car/{carId}")]
+        [HttpGet("car/{carId}")]
         public ActionResult<IEnumerable<DriverDto>> GetAllDriversByCarId([FromRoute] int carId)
         {
             var drivers = _driverService.GetAllDriversByCarId(carId);
