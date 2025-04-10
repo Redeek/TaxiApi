@@ -14,6 +14,13 @@ namespace TaxiApi
         {
             if (_dbContext.Database.CanConnect())
             {
+                if (!_dbContext.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    _dbContext.Roles.AddRange(roles);
+                    _dbContext.SaveChanges();
+                }
+
                 if (!_dbContext.Cars.Any())
                 {
                     var cars = GetCars();
@@ -38,23 +45,39 @@ namespace TaxiApi
                     {
                         new Driver()
                         {
-                            Name = "Mateusz",
-                            Surname = "Rdestowicz",
                             ContractNumber = "34e813tsa942",
                             IdNumber = "12345678901",
                             StartOfContractNumber = new DateTime(2025,1,13),
-                            EndOfContractNumber = new DateTime(2026,1,30)
+                            EndOfContractNumber = new DateTime(2026,1,30),
+                            User = new User()
+                            {
+                                Email = "mati.red@mail.com",
+                                Name = "Mateusz",
+                                Surname = "Rdest",
+                                PhoneNumber = "123123123"
+                            }
                         },
-                        new Driver()
-                        {
-                            Name = "Jarek",
-                            Surname = "Zabłocki",
-                            ContractNumber = "342111dsa813tsa942",
-                            IdNumber = "12343278901",
-                            StartOfContractNumber = new DateTime(2025,1,13),
-                            EndOfContractNumber = new DateTime(2026,1,30)
-                        }
+                      
                     }
+                }
+            };
+        }
+
+        private IEnumerable<Role> GetRoles()
+        {
+            return new List<Role>()
+            {
+                new Role()
+                {
+                    Name = "Driver"
+                },
+                new Role()
+                {
+                    Name = "Manager"
+                },
+                new Role()
+                {
+                    Name = "Admin"
                 }
             };
         }

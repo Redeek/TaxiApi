@@ -8,6 +8,9 @@ namespace TaxiApi.Entities
         public DbSet<Car> Cars { get; set; }
         public DbSet<Driver> Drivers { get; set; }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Car>()
@@ -24,6 +27,19 @@ namespace TaxiApi.Entities
                 .HasMany(c => c.Drivers)
                 .WithMany(d => d.Cars)
                 .UsingEntity(j => j.ToTable("CarDriver"));
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Email)
+                .IsRequired();
+
+            modelBuilder.Entity<Role>()
+                .Property(r => r.Name)
+                .IsRequired();
+
+            //modelBuilder.Entity<Driver>()
+            //    .HasOne(u => u.User)
+            //    .WithOne(d => d.Driver)
+            //    .HasForeignKey<Driver>(d => d.UserId);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

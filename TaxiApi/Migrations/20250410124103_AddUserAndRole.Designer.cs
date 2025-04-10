@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaxiApi.Entities;
 
@@ -11,9 +12,11 @@ using TaxiApi.Entities;
 namespace TaxiApi.Migrations
 {
     [DbContext(typeof(TaxiDbContext))]
-    partial class TaxiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250410124103_AddUserAndRole")]
+    partial class AddUserAndRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
