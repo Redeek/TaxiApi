@@ -12,6 +12,7 @@ namespace TaxiApi.Services
         IEnumerable<DriverDto> GetAllDriversByCarId(int carId);
         DriverDto GetDriverById(int driverId);
         void DeleteDriver(int driverId);
+        IEnumerable<DriverDto> GetAll();
     }
 
     public class DriverService : IDriverService
@@ -41,6 +42,17 @@ namespace TaxiApi.Services
             _context.SaveChanges();
 
             return driver.Id;
+        }
+
+        public IEnumerable<DriverDto> GetAll()
+        {
+            var drivers = _context.Drivers
+                .Include(d => d.User)
+                .ToList();
+
+            var driverDto = _mapper.Map<List<DriverDto>>(drivers);
+
+            return driverDto;
         }
 
 

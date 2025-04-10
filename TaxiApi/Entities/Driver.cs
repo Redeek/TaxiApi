@@ -13,7 +13,7 @@ namespace TaxiApi.Entities
         public virtual List<Car> Cars { get; set; }
 
 
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         public virtual User User { get; set; }
 
     }

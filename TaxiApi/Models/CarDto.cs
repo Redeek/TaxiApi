@@ -9,6 +9,7 @@ namespace TaxiApi.Models
         public string Plate { get; set; }
 
         public string Category { get; set; }
+        public bool Damage { get; set; }
 
     }
 }

@@ -1,14 +1,17 @@
-﻿using TaxiApi.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using TaxiApi.Entities;
 
 namespace TaxiApi
 {
     public class TaxiSeeder
     {
         private readonly TaxiDbContext _dbContext;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public TaxiSeeder(TaxiDbContext dbContext)
+        public TaxiSeeder(TaxiDbContext dbContext, IPasswordHasher<User> passwordHasher)
         {
             _dbContext = dbContext;
+            _passwordHasher = passwordHasher;
         }
         public void Seed()
         {
@@ -18,6 +21,13 @@ namespace TaxiApi
                 {
                     var roles = GetRoles();
                     _dbContext.Roles.AddRange(roles);
+                    _dbContext.SaveChanges();
+                }
+
+                if (!_dbContext.Users.Any())
+                {
+                    var users = GetUsers();
+                    _dbContext.Users.AddRange(users);
                     _dbContext.SaveChanges();
                 }
 
@@ -54,7 +64,8 @@ namespace TaxiApi
                                 Email = "mati.red@mail.com",
                                 Name = "Mateusz",
                                 Surname = "Rdest",
-                                PhoneNumber = "123123123"
+                                PhoneNumber = "123123123",
+                                RoleId = 1
                             }
                         },
                       
@@ -80,6 +91,32 @@ namespace TaxiApi
                     Name = "Admin"
                 }
             };
+        }
+
+        private IEnumerable<User> GetUsers()
+        {
+            var manago = new User()
+            {
+                Email = "manager1@gmail.com",
+                Name = "Manago",
+                Surname = "Mango",
+                PhoneNumber = "123123123",
+                RoleId = 2
+            };
+            manago.Password = _passwordHasher.HashPassword(manago, "Password1");
+
+            var admin = new User()
+            {
+                Email = "admin1@gmail.com",
+                Name = "Admin",
+                Surname = "Admin",
+                PhoneNumber = "123123123",
+                RoleId = 3
+            };
+            admin.Password = _passwordHasher.HashPassword(admin, "Password1");
+
+            return new List<User> { manago, admin };
+
         }
     }
 }

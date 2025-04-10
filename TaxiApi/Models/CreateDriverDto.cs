@@ -9,5 +9,6 @@ namespace TaxiApi.Models
         public DateTime StartOfContractNumber { get; set; }
         public DateTime EndOfContractNumber { get; set; }
 
+        public int UserId { get; set; }
     }
 }

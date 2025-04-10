@@ -24,6 +24,13 @@ namespace TaxiApi.Controllers
             return Created($"api/driver/{newDriver}/car/{carId}", null);
         }
 
+        [HttpGet]
+        public ActionResult<IEnumerable<DriverDto>> GetAll()
+        {
+            var drivers = _driverService.GetAll();
+            return Ok(drivers);
+        }
+
         [HttpGet("car/{carId}")]
         public ActionResult<IEnumerable<DriverDto>> GetAllDriversByCarId([FromRoute] int carId)
         {
