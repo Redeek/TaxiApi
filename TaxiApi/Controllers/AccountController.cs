@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using TaxiApi.Models;
 using TaxiApi.Services;
@@ -17,7 +18,17 @@ namespace TaxiApi.Controllers
             _accountService = accountService;
         }
 
+        [HttpPost("{userId}")]
+        [Authorize(Roles = "Admin,Manager")]
+        public ActionResult AssignUserToDriver([FromRoute] int userId, [FromBody] CreateDriverDto dto)
+        {
+            var newDriver = _accountService.AssignUserToDriver(userId, dto);
+
+            return Ok($"new assign id {newDriver}");
+        }
+
         [HttpPost("register")]
+        [Authorize(Roles = "Admin,Manager")]
         public ActionResult RegisterUser([FromBody] RegisterUserDto dto)
         {
             _accountService.RegisterUser(dto);

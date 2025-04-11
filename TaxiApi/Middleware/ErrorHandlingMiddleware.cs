@@ -28,6 +28,11 @@ namespace TaxiApi.Exceptions
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(badRequestException.Message);
             }
+            catch (UserInvalidOperationException invalidOperationException)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(invalidOperationException.Message);
+            }
             catch(Exception e)
             {
                 _logger.LogError(e, e.Message);

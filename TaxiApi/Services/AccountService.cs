@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,7 @@ namespace TaxiApi.Services
     {
         void RegisterUser(RegisterUserDto dto);
         string GenerateJwt(LoginDto dto);
+        int AssignUserToDriver(int userId, CreateDriverDto dto);
     }
 
     public class AccountService: IAccountService
@@ -21,12 +23,35 @@ namespace TaxiApi.Services
         private readonly TaxiDbContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly AuthenticationSettings _authenticationSettings;
+        private readonly IMapper _mapper;
 
-        public AccountService(TaxiDbContext context, IPasswordHasher<User> passwordHasher, AuthenticationSettings _authenticationSettings)
+        public AccountService(TaxiDbContext context, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings, IMapper mapper)
         {
             _context = context;
             _passwordHasher = passwordHasher;
-            this._authenticationSettings = _authenticationSettings;
+            _authenticationSettings = authenticationSettings;
+            _mapper = mapper;
+        }
+
+        public int AssignUserToDriver(int userId, CreateDriverDto dto)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user is null)
+                throw new NotFoundException("User not found");
+
+            //Check if driver has already assinged user
+            if (_context.Drivers.Any(d => d.UserId == userId))
+                throw new UserInvalidOperationException("User already assigned to a driver");
+
+            var driver = _mapper.Map<Driver>(dto);
+
+            driver.UserId = userId;
+
+            _context.Drivers.Add(driver);
+            _context.SaveChanges();
+
+            return driver.Id;
         }
 
         public void RegisterUser(RegisterUserDto dto)
@@ -48,6 +73,8 @@ namespace TaxiApi.Services
 
         }
 
+
+        //responsible for logging in
         public string GenerateJwt(LoginDto dto)
         {
             var user = _context.Users

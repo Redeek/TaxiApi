@@ -23,7 +23,7 @@ namespace TaxiApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //
+            //Authentication settings
             var authenticationSettings = new AuthenticationSettings();
             builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 

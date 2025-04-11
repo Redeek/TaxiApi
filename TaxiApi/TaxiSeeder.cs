@@ -43,35 +43,38 @@ namespace TaxiApi
 
         private IEnumerable<Car> GetCars()
         {
-            return new List<Car>()
+            var user = new User()
             {
-                new Car()
-                {
-                    Name = "Corolla",
-                    Plate = "LU4196F",
-                    Category = "Uber",
-                    Damage = false,
-                    Drivers = new List<Driver>()
-                    {
-                        new Driver()
-                        {
-                            ContractNumber = "34e813tsa942",
-                            IdNumber = "12345678901",
-                            StartOfContractNumber = new DateTime(2025,1,13),
-                            EndOfContractNumber = new DateTime(2026,1,30),
-                            User = new User()
-                            {
-                                Email = "mati.red@mail.com",
-                                Name = "Mateusz",
-                                Surname = "Rdest",
-                                PhoneNumber = "123123123",
-                                RoleId = 1
-                            }
-                        },
-                      
-                    }
-                }
+                Email = "driver.test@test.pl",
+                Name = "Kamil",
+                Surname = "Machnio",
+                PhoneNumber = "123123123",
+                RoleId = 1
             };
+
+            user.Password = _passwordHasher.HashPassword(user, "Password1");
+
+            var driver = new Driver()
+            {
+                ContractNumber = "E1231EEEAASD42",
+                IdNumber = "12312312311",
+                StartOfContractNumber = new DateTime(2025, 1, 13),
+                EndOfContractNumber = new DateTime(2026, 12, 1),
+                User = user
+            };
+
+            var car = new Car()
+            {
+                Name = "Corolla",
+                Plate = "LU4196F",
+                Category = "Uber",
+                Damage = false,
+                Drivers = new List<Driver> { driver }
+            };
+
+
+            return new List<Car> { car };
+
         }
 
         private IEnumerable<Role> GetRoles()

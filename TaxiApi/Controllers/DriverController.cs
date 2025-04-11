@@ -25,7 +25,7 @@ namespace TaxiApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<DriverDto>> GetAll()
+        public ActionResult<IEnumerable<DriverDataDto>> GetAll()
         {
             var drivers = _driverService.GetAll();
             return Ok(drivers);
@@ -53,6 +53,14 @@ namespace TaxiApi.Controllers
             _driverService.DeleteDriver(driverId);
 
             return NoContent();
+        }
+
+        [HttpPost("{driverId}/car/{carId}")]
+        public ActionResult AssignDriverToCar([FromRoute] int driverId, [FromRoute] int carId)
+        {
+            _driverService.AssignDriverToCar(driverId, carId);
+
+            return Ok();
         }
              
     }

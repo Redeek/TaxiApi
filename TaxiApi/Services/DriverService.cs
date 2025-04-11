@@ -12,7 +12,8 @@ namespace TaxiApi.Services
         IEnumerable<DriverDto> GetAllDriversByCarId(int carId);
         DriverDto GetDriverById(int driverId);
         void DeleteDriver(int driverId);
-        IEnumerable<DriverDto> GetAll();
+        IEnumerable<DriverDataDto> GetAll();
+        public void AssignDriverToCar(int driverId, int carId);
     }
 
     public class DriverService : IDriverService
@@ -24,6 +25,23 @@ namespace TaxiApi.Services
         {
             _context = context;
             _mapper = mapper;
+        }
+
+
+        public void AssignDriverToCar(int driverId, int carId)
+        {
+            var car = _context.Cars.FirstOrDefault(c => c.Id == carId);
+            if (car is null)
+                throw new NotFoundException("Car not found");
+
+            var driver = _context.Drivers.FirstOrDefault(d => d.Id == driverId);
+            if (driver is null)
+                throw new NotFoundException("User not found");
+
+            driver.Cars ??= new List<Car>();
+            driver.Cars.Add(car);
+            _context.SaveChanges();
+
         }
 
 
@@ -44,13 +62,13 @@ namespace TaxiApi.Services
             return driver.Id;
         }
 
-        public IEnumerable<DriverDto> GetAll()
+        public IEnumerable<DriverDataDto> GetAll()
         {
             var drivers = _context.Drivers
                 .Include(d => d.User)
                 .ToList();
 
-            var driverDto = _mapper.Map<List<DriverDto>>(drivers);
+            var driverDto = _mapper.Map<List<DriverDataDto>>(drivers);
 
             return driverDto;
         }
