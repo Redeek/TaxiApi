@@ -41,5 +41,14 @@ namespace TaxiApi.Controllers
             string token = _accountService.GenerateJwt(dto);
             return Ok(token);
         }
+
+        [HttpDelete("{userId}")]
+        [Authorize(Roles = "Admin,Manager")]
+        public ActionResult DeleteUser([FromRoute] int userId)
+        {
+            _accountService.DeleteUser(userId);
+            return NoContent();
+        }
+
     }
 }

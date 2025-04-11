@@ -16,6 +16,7 @@ namespace TaxiApi.Services
         void RegisterUser(RegisterUserDto dto);
         string GenerateJwt(LoginDto dto);
         int AssignUserToDriver(int userId, CreateDriverDto dto);
+        void DeleteUser(int userId);
     }
 
     public class AccountService: IAccountService
@@ -31,6 +32,22 @@ namespace TaxiApi.Services
             _passwordHasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
             _mapper = mapper;
+        }
+
+        public void DeleteUser(int userId)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user is null)
+                throw new NotFoundException("User not found");
+
+            //Check if user is a driver
+            if (user.RoleId != 1)
+                throw new UserInvalidOperationException("You can only delete drivers");
+
+            _context.Remove(user);
+            _context.SaveChanges();
+
         }
 
         public int AssignUserToDriver(int userId, CreateDriverDto dto)
