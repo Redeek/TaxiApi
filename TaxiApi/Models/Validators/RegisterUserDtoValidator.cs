@@ -13,7 +13,9 @@ namespace TaxiApi.Models.Validators
 
             RuleFor(x => x.Password).MinimumLength(6);
 
-            RuleFor(x => x.ConfirmPassword).Equal(e => e.Password);
+            RuleFor(x => x.ConfirmPassword)
+                .Equal(e => e.Password)
+                .WithMessage("Password is too short!");
 
             RuleFor(x => x.Email)
                 .Custom((value, context) =>

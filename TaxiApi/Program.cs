@@ -68,6 +68,7 @@ namespace TaxiApi
             //Hash password and validator
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+            builder.Services.AddScoped<IValidator<CreateCarDto>, CreateCarDtoValidator>();
 
             var app = builder.Build();
 
