@@ -38,8 +38,13 @@ namespace TaxiApi.Services
             if (driver is null)
                 throw new NotFoundException("User not found");
 
+            if (driver.Cars.Any(c => c.Id == car.Id))
+                throw new BadRequestException("Already exists.");
+
+
             driver.Cars ??= new List<Car>();
             driver.Cars.Add(car);
+
             _context.SaveChanges();
 
         }

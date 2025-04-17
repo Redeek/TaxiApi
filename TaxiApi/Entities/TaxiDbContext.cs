@@ -5,11 +5,11 @@ namespace TaxiApi.Entities
     public class TaxiDbContext: DbContext
     {
         private string _connectionString = "Server=(localdb)\\mssqllocaldb;Database=TaxiDb;Trusted_Connection=True;";
-        public DbSet<Car> Cars { get; set; }
-        public DbSet<Driver> Drivers { get; set; }
+        public virtual DbSet<Car> Cars { get; set; }
+        public virtual DbSet<Driver> Drivers { get; set; }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
