@@ -34,7 +34,8 @@ namespace TaxiApi.Controllers
             _accountService.RegisterUser(dto);
             return Ok();
         }
-
+        [Authorize(Policy = "ContractContinues")]
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPost("login")]
         public ActionResult Login([FromBody] LoginDto dto)
         {

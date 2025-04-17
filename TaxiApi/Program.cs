@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using NLog.Web;
@@ -14,6 +15,7 @@ using TaxiApi.Services;
 using TaxiApi.Controllers;
 using TaxiApi.Models;
 using TaxiApi.Models.Validators;
+using TaxiApi.Authorization;
 
 namespace TaxiApi
 {
@@ -45,6 +47,13 @@ namespace TaxiApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
                 };
             });
+
+            builder.Services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("ContractContinues", builder => builder.AddRequirements(new EndOfContractNumberRequirement()));
+            });
+
+            builder.Services.AddScoped<IAuthorizationHandler, EndOfContractNumberRequirementHandler>();
 
             // Add services to the container.
             builder.Services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
