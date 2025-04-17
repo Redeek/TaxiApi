@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using TaxiApi.Models;
 using TaxiApi.Services;
 
@@ -34,7 +33,8 @@ namespace TaxiApi.Controllers
             _accountService.RegisterUser(dto);
             return Ok();
         }
-
+        [Authorize(Policy = "ContractContinues")]
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPost("login")]
         public ActionResult Login([FromBody] LoginDto dto)
         {

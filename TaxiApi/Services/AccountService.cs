@@ -96,6 +96,7 @@ namespace TaxiApi.Services
         {
             var user = _context.Users
                 .Include(u => u.Role)
+                .Include(d=> d.Driver)
                 .FirstOrDefault(u => u.Email == dto.Email);
 
             if (user is null)
@@ -114,6 +115,7 @@ namespace TaxiApi.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.Name),
+                new Claim("EndOfContractNumber", user.Driver.EndOfContractNumber.ToString("yyyy-MM-dd")),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
