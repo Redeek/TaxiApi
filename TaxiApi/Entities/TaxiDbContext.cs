@@ -4,12 +4,20 @@ namespace TaxiApi.Entities
 {
     public class TaxiDbContext: DbContext
     {
+
+        public TaxiDbContext(DbContextOptions<TaxiDbContext> options) : base(options)
+        {
+        }
+
         private string _connectionString = "Server=(localdb)\\mssqllocaldb;Database=TaxiDb;Trusted_Connection=True;";
         public virtual DbSet<Car> Cars { get; set; }
         public virtual DbSet<Driver> Drivers { get; set; }
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+
+
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,7 +52,11 @@ namespace TaxiApi.Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);
+            if (!optionsBuilder.IsConfigured)
+            {
+               optionsBuilder.UseSqlServer(_connectionString);
+            }
+            
         }
     }
 }
